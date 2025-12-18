@@ -91,15 +91,14 @@
 
       <div class="auth-form-group terms-checkbox-group">
         <div class="terms-layout">
-    <label class="checkbox-container-simple">
-      <input type="checkbox" id="terms" name="terms" required>
-      <span class="checkmark-simple"></span>
-      <span class="terms-label-text">Saya menyetujui</span>
-    </label>
-
-    <a href="#" class="terms-trigger-link">Syarat & Ketentuan</a>
-    <span class="terms-suffix-text">yang berlaku.</span>
-  </div>
+          <label class="checkbox-container-simple">
+            <input type="checkbox" id="su_terms" name="terms" required />
+            <span class="checkmark-simple"></span>
+            <span class="terms-label-text">Saya menyetujui</span>
+          </label>
+          <a href="#" id="triggerTerms" class="terms-trigger-link">Syarat & Ketentuan</a>
+          <span class="terms-suffix-text">yang berlaku.</span>
+        </div>
 
         <!-- Dropdown Content -->
         <div class="terms-dropdown" id="termsDropdown" style="display: none !important;">
@@ -216,6 +215,9 @@
           <div id="barFill" class="bar-fill"></div>
         </div>
         <div class="form-actions">
+          <button class="auth-btn auth-btn-primary" id="btnGoLogin">
+            <span>Masuk ke Login</span>
+          </button>
           <button class="auth-btn auth-btn-secondary hidden" id="btnRetry">
             <span>Coba Lagi</span>
           </button>
