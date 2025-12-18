@@ -161,24 +161,30 @@
     const block = document.createElement('div');
     block.className = 'gizi-preview-wrapper reveal';
 
+    // 1. HEADER: Hapus tombol dari sini agar tidak menyamping di tengah
     const header = document.createElement('div');
     header.className = 'gizi-preview-header';
     header.innerHTML = `
       <h2>Informasi Gizi & Kelayakan Makanan</h2>
-      <p>Cuplikan konten edukatif dari halaman program gizi dan kelayakan makanan. Klik untuk melihat detail lengkap.</p>
-      <div class="gizi-preview-actions">
-        <a href="gizi.html#informasi-gizi" class="btn-primary">Lihat Informasi Gizi</a>
-        <a href="gizi.html#kelayakan" class="btn-secondary">Lihat Kelayakan Makanan</a>
-      </div>
+      <p>Cuplikan konten edukatif dari halaman program gizi dan kelayakan makanan.</p>
     `;
     block.appendChild(header);
 
     const row = document.createElement('div');
     row.className = 'gizi-preview-row';
 
+    // 2. KOLOM KIRI (GIZI)
     const left = document.createElement('div');
     left.className = 'gizi-preview-col';
-    left.innerHTML = '<h3>Contoh Makanan</h3>';
+    
+    // Perbaikan: Tombol dimasukkan ke sini, tepat di atas judul "Contoh Makanan"
+    left.innerHTML = `
+      <div style="margin-bottom: 15px; text-align: center;">
+        <a href="gizi.html#informasi-gizi" class="btn-primary" style="display:block; width:100%; box-sizing:border-box;">Lihat Informasi Gizi</a>
+      </div>
+      <h3>Contoh Makanan</h3>
+    `;
+    
     const giziContainer = document.createElement('div');
     giziContainer.className = 'gizi-preview-cards';
     gizi.slice(0, 4).forEach((item, idx) => {
@@ -186,9 +192,18 @@
     });
     left.appendChild(giziContainer);
 
+    // 3. KOLOM KANAN (KELAYAKAN)
     const right = document.createElement('div');
     right.className = 'gizi-preview-col';
-    right.innerHTML = '<h3>Edukasi Kelayakan</h3>';
+    
+    // Perbaikan: Tombol dimasukkan ke sini, tepat di atas judul "Edukasi Kelayakan"
+    right.innerHTML = `
+      <div style="margin-bottom: 15px; text-align: center;">
+        <a href="gizi.html#kelayakan" class="btn-secondary" style="display:block; width:100%; box-sizing:border-box;">Lihat Kelayakan Makanan</a>
+      </div>
+      <h3>Edukasi Kelayakan</h3>
+    `;
+    
     const kelContainer = document.createElement('div');
     kelContainer.className = 'gizi-preview-kelayakan';
     kel.slice(0, 2).forEach((item, idx) => {
