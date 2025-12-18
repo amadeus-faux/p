@@ -868,27 +868,22 @@ h1 {
 .terms-layout {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
-  /* Prevent wrapping */
-  gap: 8px;
-  /* Consistent gap */
+  flex-wrap: nowrap; /* Mencegah wrapping yang berantakan */
+  gap: 8px; /* Jarak konsisten antar elemen */
   font-size: 14px;
   color: var(--neutral-600);
   justify-content: flex-start;
-  /* Ensure left alignment */
 }
 
 .checkbox-container-simple {
   display: inline-flex;
-  /* Fix for left alignment */
   align-items: center;
   position: relative;
   cursor: pointer;
   user-select: none;
-  padding-left: 28px;
+  padding-left: 28px; /* Ruang untuk kotak checkbox custom */
   margin-right: 2px;
   white-space: nowrap;
-  /* Prevent text wrap */
 }
 
 .checkbox-container-simple input {
@@ -903,7 +898,7 @@ h1 {
   position: absolute;
   left: 0;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* Center vertikal absolut */
   height: 20px;
   width: 20px;
   background-color: rgba(255, 255, 255, 0.8);
@@ -912,23 +907,26 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.checkbox-container-simple:hover input~.checkmark-simple {
+/* Hover State */
+.checkbox-container-simple:hover input ~ .checkmark-simple {
   background-color: rgba(39, 174, 96, 0.1);
   border-color: var(--primary);
 }
 
-.checkbox-container-simple input:checked~.checkmark-simple {
+/* Checked State */
+.checkbox-container-simple input:checked ~ .checkmark-simple {
   background-color: var(--primary);
   border-color: var(--primary);
 }
 
+/* Checkmark Icon (L Shape) */
 .checkmark-simple:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-.checkbox-container-simple input:checked~.checkmark-simple:after {
+.checkbox-container-simple input:checked ~ .checkmark-simple:after {
   display: block;
 }
 
@@ -942,13 +940,11 @@ h1 {
   transform: rotate(45deg);
 }
 
-/* T&C - Unify Font Weights & Alignment */
+/* Text Alignment & Styling */
 .terms-label-text,
 .terms-suffix-text {
   color: var(--neutral-600);
-  /* Keep neutral color for readability */
   font-weight: 600;
-  /* Match bold style */
   display: inline-block;
   font-size: 14px;
 }
@@ -957,19 +953,15 @@ h1 {
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
-  /* Consistent weight */
   cursor: pointer;
   transition: color 0.2s;
   padding: 0 4px;
-  /* Remove vertical padding to fix alignment */
   border-radius: 4px;
   display: inline-block;
   position: relative;
-  top: -1px;
-  /* Slight visual nudge up to match Checkbox text baseline */
+  top: -1px; /* Micro-adjustment agar sejajar mata */
 }
 
-/* Ensure suffix is also aligned */
 .terms-suffix-text {
   position: relative;
   top: -1px;
@@ -1697,67 +1689,4 @@ button.loading::after {
   .subtitle {
     font-size: 14px;
   }
-}
-
-/* =========================================
-   TAMBAHAN: FIX LAYOUT CHECKBOX TERMS
-   ========================================= */
-
-/* Membungkus checkbox dan teks agar sejajar (Flexbox) */
-.auth-checkbox-container {
-    display: flex;
-    align-items: flex-start; /* Sejajar mulai dari atas, aman untuk teks panjang */
-    gap: 12px;               /* Jarak antara kotak centang dan teks */
-    margin-bottom: 24px;     /* Jarak ke tombol login */
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--neutral-600, #4b5563);
-    line-height: 1.5;        /* Tinggi baris agar enak dibaca */
-    user-select: none;
-}
-
-/* Reset style default checkbox browser */
-.auth-checkbox-container input[type="checkbox"] {
-    appearance: none;        /* Hilangkan bentuk default */
-    -webkit-appearance: none;
-    width: 20px;
-    min-width: 20px;         /* Agar tidak gepeng */
-    height: 20px;
-    border: 2px solid var(--neutral-300, #d1d5db);
-    border-radius: 6px;      /* Sudut kotak tumpul (modern) */
-    background-color: white;
-    cursor: pointer;
-    position: relative;
-    margin-top: 2px;         /* Sedikit turun agar pas dengan teks */
-    transition: all 0.2s ease;
-}
-
-/* Efek saat dicentang (Checked) */
-.auth-checkbox-container input[type="checkbox"]:checked {
-    background-color: var(--primary, #27AE60);
-    border-color: var(--primary, #27AE60);
-}
-
-/* Membuat ikon centang manual dengan CSS */
-.auth-checkbox-container input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-/* Style untuk Link di dalam label */
-.auth-checkbox-container a {
-    color: var(--primary, #27AE60);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.auth-checkbox-container a:hover {
-    text-decoration: underline;
 }
