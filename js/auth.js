@@ -124,6 +124,9 @@
     titleEl.textContent = title || (success ? 'Berhasil' : 'Gagal');
     msgEl.textContent = message || '';
 
+    // Tampilkan panel
+    panel.classList.remove('hidden');
+
     // Confetti on success
     if (success) {
       const top = panel.querySelector('.confetti.top-left');
@@ -151,60 +154,35 @@
 
     // CTA buttons
     if (success) {
-      btnGo.classList.remove('hidden');
-      btnRetry.classList.add('hidden');
-      if (autoBar) autoBar.classList.remove('hidden');
+  btnGo.classList.remove('hidden');
+  btnRetry.classList.add('hidden');
+  if (autoBar) autoBar.classList.remove('hidden');
 
-      btnGo.onclick = () => {
-        btnGo.classList.add('pressed');
-        btnGo.disabled = true;
-        setTimeout(() => btnGo.classList.remove('pressed'), 260);
-        // Close panel with animation, then redirect
-        if (resultCard) {
-          resultCard.style.animation = 'modalExit 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
-        }
-        if (panel) {
-          panel.style.opacity = '0';
-          panel.style.transition = 'opacity 0.3s ease';
-        }
-        setTimeout(() => {
-          closePanel();
-          // Ensure redirect happens
-          if (returnTo) {
-            window.location.href = returnTo;
-          }
-        }, 350);
-      };
+  btnGo.onclick = () => {
+    btnGo.classList.add('pressed');
+    btnGo.disabled = true;
+    setTimeout(() => btnGo.classList.remove('pressed'), 260);
+    if (resultCard) {
+      resultCard.style.animation = 'modalExit 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+    }
+    if (panel) {
+      panel.style.opacity = '0';
+      panel.style.transition = 'opacity 0.3s ease';
+    }
+    setTimeout(() => {
+      closePanel();
+      if (returnTo) {
+        window.location.href = returnTo;
+      }
+    }, 350);
+  };
 
       startAutoDismiss();
     } else {
       btnGo.classList.add('hidden');
-      btnRetry.classList.remove('hidden');
+      btnRetry.classList.add('hidden');
       if (autoBar) autoBar.classList.add('hidden');
       if (barFill) barFill.style.width = '0%';
-
-      btnRetry.onclick = () => {
-        closePanel();
-        if (returnTo === 'login') {
-          const loginForm = el('loginForm');
-          const menuAuth = el('menuAuth');
-          if (loginForm && menuAuth) {
-            menuAuth.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            const first = loginForm.querySelector('input');
-            if (first) first.focus();
-          }
-        } else {
-          const signupForm = el('signupForm');
-          const menuAuth = el('menuAuth');
-          if (signupForm && menuAuth) {
-            menuAuth.classList.add('hidden');
-            signupForm.classList.remove('hidden');
-            const first = signupForm.querySelector('input');
-            if (first) first.focus();
-          }
-        }
-      };
     }
 
     // Close handlers
