@@ -244,15 +244,6 @@ if ($isMBG) {
                                         <p class="admin-review-text">
                                             <?php echo nl2br(htmlspecialchars($item['deskripsi'])); ?>
                                         </p>
-
-                                        <?php if (!empty($item['bukti_path'])): ?>
-                                            <button type="button" 
-                                            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
-                                            class="admin-review-attachment"
-                                            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
-                                            📄 Lihat bukti pendukung 
-                                        </button>
-                                        <?php endif; ?>
                                     </div>
 
                                     <footer class="admin-review-footer">
@@ -268,6 +259,14 @@ if ($isMBG) {
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
+                    <?php if (!empty($item['bukti_path'])): ?>
+                                            <button type="button" 
+                                            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
+                                            class="admin-review-attachment"
+                                            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
+                                            📄 Lihat bukti pendukung 
+                                        </button>
+                                        <?php endif; ?>
                 </section>
             <?php else: ?>
                 <form id="formPengaduan" class="pengaduan-form" enctype="multipart/form-data">
