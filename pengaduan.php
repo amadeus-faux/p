@@ -246,12 +246,13 @@ if ($isMBG) {
                                         </p>
 
                                         <?php if (!empty($item['bukti_path'])): ?>
-                                            <a href="javascript:void(0);" 
-                                               onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
-                                               class="admin-review-attachment">
-                                               📄 Lihat bukti pendukung
-                                            </a>
-                                        <?php endif; ?>
+    <button type="button" 
+            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
+            class="admin-review-attachment"
+            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
+       📄 Lihat bukti pendukung
+    </button>
+<?php endif; ?>
                                     </div>
 
                                     <footer class="admin-review-footer">
@@ -417,62 +418,67 @@ if ($isMBG) {
     <script src="main.js"></script>
 
     <script>
-        // --- LOGIKA MODAL BUKTI ---
-        function lihatBukti(urlPath) {
-            const modal = document.getElementById('modalBukti');
-            const img = document.getElementById('imgTampilanBukti');
-            const pdfContainer = document.getElementById('pdfContainer');
-            const pdfFrame = document.getElementById('pdfFrame');
-            const link = document.getElementById('linkDownloadBukti');
+    // Debugging: Cek apakah fungsi ini jalan
+    console.log("Sistem Modal Siap");
 
-            if (!modal) return;
+    function lihatBukti(urlPath) {
+        console.log("Tombol diklik, URL:", urlPath); // Cek di Console browser
+        
+        const modal = document.getElementById('modalBukti');
+        const img = document.getElementById('imgTampilanBukti');
+        const pdfContainer = document.getElementById('pdfContainer');
+        const pdfFrame = document.getElementById('pdfFrame');
+        const link = document.getElementById('linkDownloadBukti');
 
-            // Bersihkan state sebelumnya
-            img.style.display = 'none';
-            pdfContainer.style.display = 'none';
+        if (!modal) {
+            alert("Error: Modal tidak ditemukan di HTML");
+            return;
+        }
 
-            // Cek ekstensi file (sederhana)
-            const extension = urlPath.split('.').pop().toLowerCase();
-            
-            if (extension === 'pdf') {
-                // Tampilkan mode PDF
-                pdfFrame.src = urlPath;
-                pdfContainer.style.display = 'block';
-            } else {
-                // Tampilkan mode Gambar
-                img.src = urlPath;
-                img.style.display = 'block';
+        // Reset tampilan
+        img.style.display = 'none';
+        pdfContainer.style.display = 'none';
+
+        // Deteksi tipe file
+        const extension = urlPath.split('.').pop().toLowerCase();
+        
+        if (extension === 'pdf') {
+            pdfFrame.src = urlPath;
+            pdfContainer.style.display = 'block';
+        } else {
+            img.src = urlPath;
+            img.style.display = 'block';
+        }
+
+        // Set link download
+        link.href = urlPath;
+
+        // Tampilkan modal
+        modal.classList.add('active');
+    }
+
+    function tutupModalBukti() {
+        const modal = document.getElementById('modalBukti');
+        if (modal) {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                // Bersihkan src
+                if(document.getElementById('imgTampilanBukti')) document.getElementById('imgTampilanBukti').src = '';
+                if(document.getElementById('pdfFrame')) document.getElementById('pdfFrame').src = '';
+            }, 300);
+        }
+    }
+
+    // Event listener tutup modal saat klik luar
+    const modalBuktiEl = document.getElementById('modalBukti');
+    if (modalBuktiEl) {
+        modalBuktiEl.addEventListener('click', function(e) {
+            if (e.target === this) {
+                tutupModalBukti();
             }
-
-            // Set link download
-            link.href = urlPath;
-
-            // Tampilkan modal
-            modal.classList.add('active');
-        }
-
-        function tutupModalBukti() {
-            const modal = document.getElementById('modalBukti');
-            if (modal) {
-                modal.classList.remove('active');
-                // Bersihkan src agar hemat memori & stop video/iframe
-                setTimeout(() => {
-                    document.getElementById('imgTampilanBukti').src = '';
-                    document.getElementById('pdfFrame').src = '';
-                }, 300);
-            }
-        }
-
-        // Tutup jika klik area gelap
-        const modalBukti = document.getElementById('modalBukti');
-        if (modalBukti) {
-            modalBukti.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    tutupModalBukti();
-                }
-            });
-        }
-    </script>
+        });
+    }
+</script>
 
     <?php if (!$isMBG): ?>
         <script>
