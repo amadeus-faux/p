@@ -246,13 +246,13 @@ if ($isMBG) {
                                         </p>
 
                                         <?php if (!empty($item['bukti_path'])): ?>
-    <button type="button" 
-            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
-            class="admin-review-attachment"
-            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
-       📄 Lihat bukti pendukung
-    </button>
-<?php endif; ?>
+                                            <button type="button" 
+                                            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
+                                            class="admin-review-attachment"
+                                            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
+                                            📄 Lihat bukti pendukung 
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
 
                                     <footer class="admin-review-footer">
