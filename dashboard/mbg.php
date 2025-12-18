@@ -380,6 +380,16 @@ if ($user['role'] !== 'mbg') {
             display: block !important;
             animation: fadeIn 0.4s ease;
         }
+
+        .btn-logout {
+            background: #333333;
+            color: #27ae60;
+        }
+
+        .username {
+            background: linear-gradient(135deg, var(--accent) 0%, #ff8a00 100%);
+            color: white;
+        }
     </style>
 </head>
 
