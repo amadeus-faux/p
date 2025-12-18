@@ -1698,3 +1698,66 @@ button.loading::after {
     font-size: 14px;
   }
 }
+
+/* =========================================
+   TAMBAHAN: FIX LAYOUT CHECKBOX TERMS
+   ========================================= */
+
+/* Membungkus checkbox dan teks agar sejajar (Flexbox) */
+.auth-checkbox-container {
+    display: flex;
+    align-items: flex-start; /* Sejajar mulai dari atas, aman untuk teks panjang */
+    gap: 12px;               /* Jarak antara kotak centang dan teks */
+    margin-bottom: 24px;     /* Jarak ke tombol login */
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--neutral-600, #4b5563);
+    line-height: 1.5;        /* Tinggi baris agar enak dibaca */
+    user-select: none;
+}
+
+/* Reset style default checkbox browser */
+.auth-checkbox-container input[type="checkbox"] {
+    appearance: none;        /* Hilangkan bentuk default */
+    -webkit-appearance: none;
+    width: 20px;
+    min-width: 20px;         /* Agar tidak gepeng */
+    height: 20px;
+    border: 2px solid var(--neutral-300, #d1d5db);
+    border-radius: 6px;      /* Sudut kotak tumpul (modern) */
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;         /* Sedikit turun agar pas dengan teks */
+    transition: all 0.2s ease;
+}
+
+/* Efek saat dicentang (Checked) */
+.auth-checkbox-container input[type="checkbox"]:checked {
+    background-color: var(--primary, #27AE60);
+    border-color: var(--primary, #27AE60);
+}
+
+/* Membuat ikon centang manual dengan CSS */
+.auth-checkbox-container input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Style untuk Link di dalam label */
+.auth-checkbox-container a {
+    color: var(--primary, #27AE60);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-checkbox-container a:hover {
+    text-decoration: underline;
+}
