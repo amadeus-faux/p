@@ -51,17 +51,110 @@ if ($isMBG) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+    
+    <style>
+        /* Backdrop Modal */
+        .evidence-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Saat modal aktif */
+        .evidence-modal-backdrop.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Konten Modal */
+        .evidence-modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 800px; /* Lebar maksimal lebih besar */
+            width: 90%;
+            max-height: 90vh; /* Agar tidak melebihi tinggi layar */
+            overflow-y: auto; /* Scroll jika gambar terlalu panjang */
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Gambar di dalam Modal */
+        .evidence-image {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Tombol Close (X) */
+        .evidence-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            color: #333;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .evidence-close-btn:hover {
+            background: #ff4757;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        /* Tombol Download */
+        .btn-download-evidence {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 24px;
+            background: #27AE60;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-download-evidence:hover {
+            background: #219150;
+        }
+    </style>
 </head>
 <body>
-    <!-- ================= NAVBAR ================= -->
     <header class="navbar-container">
         <div class="navbar-inner">
-            <!-- Logo -->
             <a href="indexsiswaorangtua.html" class="logo">
                 <img src="asset/logo/foodedu.png" alt="FoodEdu Logo">
             </a>
 
-            <!-- Navigation -->
             <nav class="nav-menu">
                 <a href="indexsiswaorangtua.html" class="nav-item">Beranda</a>
                     <div class="dropdown">
@@ -76,7 +169,6 @@ if ($isMBG) {
                 <a href="pengaduan.php" class="nav-item pengaduan-link active">Pengaduan</a>
                 <a href="saran.php" class="nav-item saran-link"><?php echo $isMBG ? 'Data Saran' : 'Saran'; ?></a>
 
-                <!-- User Profile Buttons (Logged In) -->
                 <div class="nav-buttons">
                     <div class="user-profile">
                         <span class="username"><?php echo htmlspecialchars($user['name']); ?></span>
@@ -85,7 +177,6 @@ if ($isMBG) {
                 </div>
             </nav>
 
-            <!-- Hamburger -->
             <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
@@ -94,7 +185,6 @@ if ($isMBG) {
         </div>
     </header>
 
-    <!-- ================= FORM / HASIL PENGADUAN ================= -->
     <main class="pengaduan-container">
         <div class="pengaduan-card">
             <div class="pengaduan-header">
@@ -110,7 +200,6 @@ if ($isMBG) {
             </div>
 
             <?php if ($isMBG): ?>
-                <!-- Tampilan daftar pengaduan untuk MBG -->
                 <section class="admin-review-wrapper">
                     <div class="admin-review-summary">
                         <div class="admin-summary-item">
@@ -157,8 +246,10 @@ if ($isMBG) {
                                         </p>
 
                                         <?php if (!empty($item['bukti_path'])): ?>
-                                            <a href="<?php echo htmlspecialchars($item['bukti_path']); ?>" target="_blank" class="admin-review-attachment">
-                                                Lihat bukti pendukung
+                                            <a href="javascript:void(0);" 
+                                               onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
+                                               class="admin-review-attachment">
+                                               📄 Lihat bukti pendukung
                                             </a>
                                         <?php endif; ?>
                                     </div>
@@ -178,9 +269,7 @@ if ($isMBG) {
                     <?php endif; ?>
                 </section>
             <?php else: ?>
-                <!-- Form pengaduan untuk pengguna biasa -->
                 <form id="formPengaduan" class="pengaduan-form" enctype="multipart/form-data">
-                    <!-- Nama Lengkap -->
                     <div class="form-group">
                         <label for="nama_lengkap" class="form-label">
                             Nama Lengkap <span class="required">*</span>
@@ -196,7 +285,6 @@ if ($isMBG) {
                         >
                     </div>
 
-                    <!-- Nama Sekolah -->
                     <div class="form-group">
                         <label for="nama_sekolah" class="form-label">
                             Nama Sekolah <span class="required">*</span>
@@ -211,7 +299,6 @@ if ($isMBG) {
                         >
                     </div>
 
-                    <!-- Tanggal Kejadian -->
                     <div class="form-group">
                         <label for="tanggal_kejadian" class="form-label">
                             Tanggal Kejadian <span class="required">*</span>
@@ -228,7 +315,6 @@ if ($isMBG) {
                         </div>
                     </div>
 
-                    <!-- Jenis Pengaduan -->
                     <div class="form-group">
                         <label for="jenis_pengaduan" class="form-label">
                             Jenis Pengaduan <span class="required">*</span>
@@ -247,7 +333,6 @@ if ($isMBG) {
                         </select>
                     </div>
 
-                    <!-- Deskripsi Pengaduan -->
                     <div class="form-group">
                         <label for="deskripsi" class="form-label">
                             Deskripsi Pengaduan <span class="required">*</span>
@@ -262,7 +347,6 @@ if ($isMBG) {
                         ></textarea>
                     </div>
 
-                    <!-- Upload Bukti -->
                     <div class="form-group">
                         <label for="bukti" class="form-label">
                             Upload Bukti Pendukung
@@ -284,7 +368,6 @@ if ($isMBG) {
                         <small class="form-hint">Format: JPG, PNG, atau PDF (Maks. 5MB)</small>
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit" id="btnSubmit">
                             <span class="btn-text">Kirim Pengaduan</span>
@@ -292,14 +375,12 @@ if ($isMBG) {
                         </button>
                     </div>
 
-                    <!-- Success/Error Message -->
                     <div id="formMessage" class="form-message" style="display: none;"></div>
                 </form>
             <?php endif; ?>
         </div>
     </main>
 
-    <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="footer-left">
             <h3>FOODEDU</h3>
@@ -311,12 +392,87 @@ if ($isMBG) {
         <div class="footer-right">
             <p><strong>Contact</strong></p>
             <p>📧 support@foodedu.id</p>
-            <p>📱 @foodedu</p>
+            <p>📷 @foodedu</p>
             <p>📍 Indonesia</p>
         </div>
     </footer>
 
+    <div id="modalBukti" class="evidence-modal-backdrop">
+        <div class="evidence-modal-content">
+            <button onclick="tutupModalBukti()" class="evidence-close-btn">&times;</button>
+            <h3 style="margin-bottom: 15px; color: #333;">Bukti Pendukung</h3>
+            
+            <img id="imgTampilanBukti" src="" alt="Bukti Pengaduan" class="evidence-image">
+            
+            <div id="pdfContainer" style="display:none; height: 500px; margin-top:10px;">
+                <iframe id="pdfFrame" src="" width="100%" height="100%" style="border:none;"></iframe>
+            </div>
+
+            <a id="linkDownloadBukti" href="#" download class="btn-download-evidence">
+                ⬇️ Unduh File
+            </a>
+        </div>
+    </div>
+
     <script src="main.js"></script>
+
+    <script>
+        // --- LOGIKA MODAL BUKTI ---
+        function lihatBukti(urlPath) {
+            const modal = document.getElementById('modalBukti');
+            const img = document.getElementById('imgTampilanBukti');
+            const pdfContainer = document.getElementById('pdfContainer');
+            const pdfFrame = document.getElementById('pdfFrame');
+            const link = document.getElementById('linkDownloadBukti');
+
+            if (!modal) return;
+
+            // Bersihkan state sebelumnya
+            img.style.display = 'none';
+            pdfContainer.style.display = 'none';
+
+            // Cek ekstensi file (sederhana)
+            const extension = urlPath.split('.').pop().toLowerCase();
+            
+            if (extension === 'pdf') {
+                // Tampilkan mode PDF
+                pdfFrame.src = urlPath;
+                pdfContainer.style.display = 'block';
+            } else {
+                // Tampilkan mode Gambar
+                img.src = urlPath;
+                img.style.display = 'block';
+            }
+
+            // Set link download
+            link.href = urlPath;
+
+            // Tampilkan modal
+            modal.classList.add('active');
+        }
+
+        function tutupModalBukti() {
+            const modal = document.getElementById('modalBukti');
+            if (modal) {
+                modal.classList.remove('active');
+                // Bersihkan src agar hemat memori & stop video/iframe
+                setTimeout(() => {
+                    document.getElementById('imgTampilanBukti').src = '';
+                    document.getElementById('pdfFrame').src = '';
+                }, 300);
+            }
+        }
+
+        // Tutup jika klik area gelap
+        const modalBukti = document.getElementById('modalBukti');
+        if (modalBukti) {
+            modalBukti.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    tutupModalBukti();
+                }
+            });
+        }
+    </script>
 
     <?php if (!$isMBG): ?>
         <script>
@@ -419,21 +575,9 @@ if ($isMBG) {
                 });
             }
 
-            // Logout function
-            async function logout() {
-                try {
-                    const response = await fetch('auth/logout.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({})
-                    });
-                    window.location.href = 'index.html';
-                } catch(e) {
-                    window.location.href = 'index.html';
-                }
-            }
+            // Logout function (Duplicate function handling just in case)
+            // ... (Kode logout sudah ada di atas, tidak perlu double declare di block ini jika struktur PHP aman)
         </script>
     <?php endif; ?>
 </body>
 </html>
-
