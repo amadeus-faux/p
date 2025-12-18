@@ -380,6 +380,75 @@ if ($user['role'] !== 'mbg') {
             display: block !important;
             animation: fadeIn 0.4s ease;
         }
+
+        /* --- TAMBAHAN: CSS MODAL BUKTI --- */
+        .evidence-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none; /* Default sembunyi */
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .evidence-modal-backdrop.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .evidence-modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+
+        .evidence-modal-backdrop.active .evidence-modal-content {
+            transform: scale(1);
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 10px;
+            object-fit: contain;
+        }
+
+        .evidence-close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .evidence-close-btn:hover {
+            transform: scale(1.1);
+            background: #ff6b81;
+        }
     </style>
 </head>
 
@@ -615,6 +684,21 @@ if ($user['role'] !== 'mbg') {
         </div>
     </main>
 
+    <div id="modalBukti" class="evidence-modal-backdrop">
+        <div class="evidence-modal-content">
+            <button onclick="tutupModalBukti()" class="evidence-close-btn">&times;</button>
+            <h3 style="margin: 0 0 15px 0; color: #333;">Bukti Pendukung</h3>
+            
+            <img id="imgTampilanBukti" src="" alt="Bukti Pengaduan" class="evidence-image">
+            
+            <div style="margin-top: 20px;">
+                <a id="linkDownloadBukti" href="#" download class="action-btn" style="background: var(--primary); color: white; display: inline-block; text-decoration: none;">
+                    ⬇️ Unduh Gambar
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script src="../main.js"></script>
     <script>
         // --- API HELPERS ---
@@ -842,6 +926,40 @@ if ($user['role'] !== 'mbg') {
             kelForm.reset();
             document.getElementById('kelId').value = '';
         };
+
+        // --- LOGIKA MODAL BUKTI ---
+        function lihatBukti(urlGambar) {
+            const modal = document.getElementById('modalBukti');
+            const img = document.getElementById('imgTampilanBukti');
+            const link = document.getElementById('linkDownloadBukti');
+
+            if (modal && img) {
+                // Set gambar & link download
+                img.src = urlGambar;
+                if (link) link.href = urlGambar;
+
+                // Tampilkan modal
+                modal.classList.add('active');
+            }
+        }
+
+        function tutupModalBukti() {
+            const modal = document.getElementById('modalBukti');
+            if (modal) {
+                modal.classList.remove('active');
+                // Kosongkan src setelah animasi agar bersih
+                setTimeout(() => {
+                    document.getElementById('imgTampilanBukti').src = '';
+                }, 300);
+            }
+        }
+
+        // Tutup jika klik area gelap di luar modal
+        document.getElementById('modalBukti').addEventListener('click', function(e) {
+            if (e.target === this) {
+                tutupModalBukti();
+            }
+        });
 
         // INIT
         loadGizi();
