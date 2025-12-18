@@ -398,7 +398,7 @@ if ($user['role'] !== 'mbg') {
                         <a href="../gizi.html#kelayakan">Edukasi Kelayakan</a>
                     </div>
                 </div>
-                <a href="../pengaduan.php" class="nav-item">Pengaduan</a>
+                <a href="../pengaduan.php" class="nav-item pengaduan-link">Pengaduan</a>
                 <a href="../saran.php" class="nav-item saran-link">Saran</a>
                 <div class="nav-buttons">
                     <div class="user-profile">
