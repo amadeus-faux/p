@@ -44,6 +44,7 @@ if ($isMBG) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,124 +52,127 @@ if ($isMBG) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
-    
     <style>
-        /* Backdrop Modal */
-        .evidence-modal-backdrop {
+        /* ================= EVIDENCE MODAL ================= */
+        .evidence-modal {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            /* Dark overlay */
+            backdrop-filter: blur(12px);
+            /* Glassmorphism */
+            -webkit-backdrop-filter: blur(12px);
             z-index: 9999;
-            display: none; /* Hidden by default */
-            align-items: center;
+            display: flex;
             justify-content: center;
+            align-items: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Saat modal aktif */
-        .evidence-modal-backdrop.active {
-            display: flex;
+        .evidence-modal.active {
             opacity: 1;
+            visibility: visible;
         }
 
-        /* Konten Modal */
-        .evidence-modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 16px;
-            max-width: 800px; /* Lebar maksimal lebih besar */
-            width: 90%;
-            max-height: 90vh; /* Agar tidak melebihi tinggi layar */
-            overflow-y: auto; /* Scroll jika gambar terlalu panjang */
+        .evidence-content {
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90%;
+            max-height: 90vh;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Springy bounce */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        @keyframes popIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .evidence-modal.active .evidence-content {
+            transform: scale(1) translateY(0);
         }
 
-        /* Gambar di dalam Modal */
-        .evidence-image {
-            display: block;
-            margin: 10px auto;
+        .evidence-img {
             max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            object-fit: contain;
+            background: #fff;
+            /* Fallback for transparency */
         }
 
-        /* Tombol Close (X) */
-        .evidence-close-btn {
+        /* Close Button */
+        .evidence-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.1);
-            color: #333;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 20px;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.2s ease;
         }
 
-        .evidence-close-btn:hover {
-            background: #ff4757;
-            color: white;
+        .evidence-close:hover {
+            background: rgba(255, 255, 255, 0.3);
             transform: rotate(90deg);
         }
 
-        /* Tombol Download */
-        .btn-download-evidence {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 24px;
-            background: #27AE60;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 500;
-            font-size: 14px;
-            transition: background 0.3s;
+        /* Prevent link default style interference */
+        .admin-review-attachment {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s;
+            position: relative;
+            /* Ensure it stays above card overlay */
+            z-index: 10;
         }
 
-        .btn-download-evidence:hover {
-            background: #219150;
+        .admin-review-attachment:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
+
 <body>
+    <!-- ================= NAVBAR ================= -->
     <header class="navbar-container">
         <div class="navbar-inner">
+            <!-- Logo -->
             <a href="indexsiswaorangtua.html" class="logo">
                 <img src="asset/logo/foodedu.png" alt="FoodEdu Logo">
             </a>
 
+            <!-- Navigation -->
             <nav class="nav-menu">
                 <a href="indexsiswaorangtua.html" class="nav-item">Beranda</a>
-                    <div class="dropdown">
-                        <a class="nav-item dropdown-toggle">
-                            Program <span class="arrow"></span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="gizi.html#informasi-gizi">Informasi Gizi Seimbang</a>
-                            <a href="gizi.html#kelayakan">Edukasi Kelayakan Makanan</a>
-                        </div>
+                <div class="dropdown">
+                    <a class="nav-item dropdown-toggle">
+                        Program <span class="arrow"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="gizi.html#informasi-gizi">Informasi Gizi Seimbang</a>
+                        <a href="gizi.html#kelayakan">Edukasi Kelayakan Makanan</a>
                     </div>
+                </div>
                 <a href="pengaduan.php" class="nav-item pengaduan-link active">Pengaduan</a>
                 <a href="saran.php" class="nav-item saran-link"><?php echo $isMBG ? 'Data Saran' : 'Saran'; ?></a>
 
+                <!-- User Profile Buttons (Logged In) -->
                 <div class="nav-buttons">
                     <div class="user-profile">
                         <span class="username"><?php echo htmlspecialchars($user['name']); ?></span>
@@ -177,6 +181,7 @@ if ($isMBG) {
                 </div>
             </nav>
 
+            <!-- Hamburger -->
             <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
@@ -185,6 +190,7 @@ if ($isMBG) {
         </div>
     </header>
 
+    <!-- ================= FORM / HASIL PENGADUAN ================= -->
     <main class="pengaduan-container">
         <div class="pengaduan-card">
             <div class="pengaduan-header">
@@ -200,6 +206,7 @@ if ($isMBG) {
             </div>
 
             <?php if ($isMBG): ?>
+                <!-- Tampilan daftar pengaduan untuk MBG -->
                 <section class="admin-review-wrapper">
                     <div class="admin-review-summary">
                         <div class="admin-summary-item">
@@ -233,25 +240,33 @@ if ($isMBG) {
 
                                     <div class="admin-review-body">
                                         <p class="admin-review-date">
-                                            Tanggal kejadian: 
+                                            Tanggal kejadian:
                                             <strong>
-                                                <?php 
-                                                    $tgl = $item['tanggal_kejadian'];
-                                                    echo $tgl ? date('d M Y', strtotime($tgl)) : '-';
+                                                <?php
+                                                $tgl = $item['tanggal_kejadian'];
+                                                echo $tgl ? date('d M Y', strtotime($tgl)) : '-';
                                                 ?>
                                             </strong>
                                         </p>
                                         <p class="admin-review-text">
                                             <?php echo nl2br(htmlspecialchars($item['deskripsi'])); ?>
                                         </p>
+
+                                        <?php if (!empty($item['bukti_path'])): ?>
+                                            <a href="javascript:void(0)"
+                                                onclick="viewEvidence('<?php echo htmlspecialchars($item['bukti_path']); ?>')"
+                                                class="admin-review-attachment">
+                                                👁️ Lihat bukti pendukung
+                                            </a>
+                                        <?php endif; ?>
                                     </div>
 
                                     <footer class="admin-review-footer">
                                         <span class="admin-review-created">
-                                            Dikirim pada: 
-                                            <?php 
-                                                $created = $item['created_at'];
-                                                echo $created ? date('d M Y H:i', strtotime($created)) : '-';
+                                            Dikirim pada:
+                                            <?php
+                                            $created = $item['created_at'];
+                                            echo $created ? date('d M Y H:i', strtotime($created)) : '-';
                                             ?>
                                         </span>
                                     </footer>
@@ -259,72 +274,45 @@ if ($isMBG) {
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($item['bukti_path'])): ?>
-                                            <button type="button" 
-                                            onclick="lihatBukti('<?php echo htmlspecialchars($item['bukti_path']); ?>')" 
-                                            class="admin-review-attachment"
-                                            style="background:none; border:none; color:var(--primary); cursor:pointer; padding:0; font:inherit; text-decoration:underline;">
-                                            📄 Lihat bukti pendukung 
-                                        </button>
-                                        <?php endif; ?>
                 </section>
             <?php else: ?>
+                <!-- Form pengaduan untuk pengguna biasa -->
                 <form id="formPengaduan" class="pengaduan-form" enctype="multipart/form-data">
+                    <!-- Nama Lengkap -->
                     <div class="form-group">
                         <label for="nama_lengkap" class="form-label">
                             Nama Lengkap <span class="required">*</span>
                         </label>
-                        <input 
-                            type="text" 
-                            id="nama_lengkap" 
-                            name="nama_lengkap" 
-                            class="form-input"
-                            value="<?php echo htmlspecialchars($user['name']); ?>"
-                            required
-                            readonly
-                        >
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-input"
+                            value="<?php echo htmlspecialchars($user['name']); ?>" required readonly>
                     </div>
 
+                    <!-- Nama Sekolah -->
                     <div class="form-group">
                         <label for="nama_sekolah" class="form-label">
                             Nama Sekolah <span class="required">*</span>
                         </label>
-                        <input 
-                            type="text" 
-                            id="nama_sekolah" 
-                            name="nama_sekolah" 
-                            class="form-input"
-                            placeholder="Masukkan nama sekolah"
-                            required
-                        >
+                        <input type="text" id="nama_sekolah" name="nama_sekolah" class="form-input"
+                            placeholder="Masukkan nama sekolah" required>
                     </div>
 
+                    <!-- Tanggal Kejadian -->
                     <div class="form-group">
                         <label for="tanggal_kejadian" class="form-label">
                             Tanggal Kejadian <span class="required">*</span>
                         </label>
                         <div class="input-with-icon">
-                            <input 
-                                type="date" 
-                                id="tanggal_kejadian" 
-                                name="tanggal_kejadian" 
-                                class="form-input"
-                                required
-                            >
+                            <input type="date" id="tanggal_kejadian" name="tanggal_kejadian" class="form-input" required>
                             <span class="input-icon">📅</span>
                         </div>
                     </div>
 
+                    <!-- Jenis Pengaduan -->
                     <div class="form-group">
                         <label for="jenis_pengaduan" class="form-label">
                             Jenis Pengaduan <span class="required">*</span>
                         </label>
-                        <select 
-                            id="jenis_pengaduan" 
-                            name="jenis_pengaduan" 
-                            class="form-select"
-                            required
-                        >
+                        <select id="jenis_pengaduan" name="jenis_pengaduan" class="form-select" required>
                             <option value="">Pilih Jenis Pengaduan</option>
                             <option value="Kualitas Makanan">Kualitas Makanan</option>
                             <option value="Kebersihan Makanan">Kebersihan Makanan</option>
@@ -333,32 +321,22 @@ if ($isMBG) {
                         </select>
                     </div>
 
+                    <!-- Deskripsi Pengaduan -->
                     <div class="form-group">
                         <label for="deskripsi" class="form-label">
                             Deskripsi Pengaduan <span class="required">*</span>
                         </label>
-                        <textarea 
-                            id="deskripsi" 
-                            name="deskripsi" 
-                            class="form-textarea"
-                            rows="5"
-                            placeholder="Jelaskan secara detail keluhan atau masukan Anda..."
-                            required
-                        ></textarea>
+                        <textarea id="deskripsi" name="deskripsi" class="form-textarea" rows="5"
+                            placeholder="Jelaskan secara detail keluhan atau masukan Anda..." required></textarea>
                     </div>
 
+                    <!-- Upload Bukti -->
                     <div class="form-group">
                         <label for="bukti" class="form-label">
                             Upload Bukti Pendukung
                         </label>
                         <div class="file-upload-wrapper">
-                            <input 
-                                type="file" 
-                                id="bukti" 
-                                name="bukti" 
-                                class="file-input"
-                                accept="image/*,.pdf"
-                            >
+                            <input type="file" id="bukti" name="bukti" class="file-input" accept="image/*,.pdf">
                             <label for="bukti" class="file-label">
                                 <span class="file-icon">📎</span>
                                 <span class="file-text">Pilih File</span>
@@ -368,6 +346,7 @@ if ($isMBG) {
                         <small class="form-hint">Format: JPG, PNG, atau PDF (Maks. 5MB)</small>
                     </div>
 
+                    <!-- Submit Button -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit" id="btnSubmit">
                             <span class="btn-text">Kirim Pengaduan</span>
@@ -375,130 +354,52 @@ if ($isMBG) {
                         </button>
                     </div>
 
+                    <!-- Success/Error Message -->
                     <div id="formMessage" class="form-message" style="display: none;"></div>
                 </form>
             <?php endif; ?>
         </div>
     </main>
 
+    <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="footer-left">
             <h3>FOODEDU</h3>
             <p>
-                FoodEdu adalah platform berbasis web yang dirancang sebagai media edukasi 
+                FoodEdu adalah platform berbasis web yang dirancang sebagai media edukasi
                 dan pengumpulan laporan terkait program makan bergizi di sekolah.
             </p>
         </div>
         <div class="footer-right">
             <p><strong>Contact</strong></p>
             <p>📧 support@foodedu.id</p>
-            <p>📷 @foodedu</p>
+            <p>📱 @foodedu</p>
             <p>📍 Indonesia</p>
         </div>
     </footer>
 
-    <div id="modalBukti" class="evidence-modal-backdrop">
-        <div class="evidence-modal-content">
-            <button onclick="tutupModalBukti()" class="evidence-close-btn">&times;</button>
-            <h3 style="margin-bottom: 15px; color: #333;">Bukti Pendukung</h3>
-            
-            <img id="imgTampilanBukti" src="" alt="Bukti Pengaduan" class="evidence-image">
-            
-            <div id="pdfContainer" style="display:none; height: 500px; margin-top:10px;">
-                <iframe id="pdfFrame" src="" width="100%" height="100%" style="border:none;"></iframe>
-            </div>
-
-            <a id="linkDownloadBukti" href="#" download class="btn-download-evidence">
-                ⬇️ Unduh File
-            </a>
-        </div>
-    </div>
-
     <script src="main.js"></script>
-
-    <script>
-    // Debugging: Cek apakah fungsi ini jalan
-    console.log("Sistem Modal Siap");
-
-    function lihatBukti(urlPath) {
-        console.log("Tombol diklik, URL:", urlPath); // Cek di Console browser
-        
-        const modal = document.getElementById('modalBukti');
-        const img = document.getElementById('imgTampilanBukti');
-        const pdfContainer = document.getElementById('pdfContainer');
-        const pdfFrame = document.getElementById('pdfFrame');
-        const link = document.getElementById('linkDownloadBukti');
-
-        if (!modal) {
-            alert("Error: Modal tidak ditemukan di HTML");
-            return;
-        }
-
-        // Reset tampilan
-        img.style.display = 'none';
-        pdfContainer.style.display = 'none';
-
-        // Deteksi tipe file
-        const extension = urlPath.split('.').pop().toLowerCase();
-        
-        if (extension === 'pdf') {
-            pdfFrame.src = urlPath;
-            pdfContainer.style.display = 'block';
-        } else {
-            img.src = urlPath;
-            img.style.display = 'block';
-        }
-
-        // Set link download
-        link.href = urlPath;
-
-        // Tampilkan modal
-        modal.classList.add('active');
-    }
-
-    function tutupModalBukti() {
-        const modal = document.getElementById('modalBukti');
-        if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => {
-                // Bersihkan src
-                if(document.getElementById('imgTampilanBukti')) document.getElementById('imgTampilanBukti').src = '';
-                if(document.getElementById('pdfFrame')) document.getElementById('pdfFrame').src = '';
-            }, 300);
-        }
-    }
-
-    // Event listener tutup modal saat klik luar
-    const modalBuktiEl = document.getElementById('modalBukti');
-    if (modalBuktiEl) {
-        modalBuktiEl.addEventListener('click', function(e) {
-            if (e.target === this) {
-                tutupModalBukti();
-            }
-        });
-    }
-</script>
 
     <?php if (!$isMBG): ?>
         <script>
             // Setup logout button
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const logoutBtn = document.getElementById('logoutBtn');
                 if (logoutBtn) {
-                    logoutBtn.addEventListener('click', function() {
+                    logoutBtn.addEventListener('click', function () {
                         fetch('auth/logout.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({})
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            window.location.href = 'index.html';
-                        })
-                        .catch(error => {
-                            console.error('Logout error:', error);
-                            window.location.href = 'index.html';
-                        });
+                            .then(response => response.json())
+                            .then(data => {
+                                window.location.href = 'index.html';
+                            })
+                            .catch(error => {
+                                console.error('Logout error:', error);
+                                window.location.href = 'index.html';
+                            });
                     });
                 }
             });
@@ -507,9 +408,9 @@ if ($isMBG) {
             // File input handler
             const fileInput = document.getElementById('bukti');
             const fileName = document.getElementById('fileName');
-            
+
             if (fileInput && fileName) {
-                fileInput.addEventListener('change', function(e) {
+                fileInput.addEventListener('change', function (e) {
                     if (e.target.files.length > 0) {
                         fileName.textContent = e.target.files[0].name;
                         fileName.style.color = 'var(--green)';
@@ -523,43 +424,43 @@ if ($isMBG) {
             // Form submission
             const pengaduanForm = document.getElementById('formPengaduan');
             if (pengaduanForm) {
-                pengaduanForm.addEventListener('submit', async function(e) {
+                pengaduanForm.addEventListener('submit', async function (e) {
                     e.preventDefault();
-                    
+
                     const btnSubmit = document.getElementById('btnSubmit');
                     const btnText = btnSubmit.querySelector('.btn-text');
                     const btnLoader = btnSubmit.querySelector('.btn-loader');
                     const formMessage = document.getElementById('formMessage');
-                    
+
                     // Disable button and show loader
                     btnSubmit.disabled = true;
                     btnText.style.display = 'none';
                     btnLoader.style.display = 'inline-block';
                     formMessage.style.display = 'none';
-                    
+
                     // Create FormData
                     const formData = new FormData(this);
-                    
+
                     try {
                         const response = await fetch('pengaduan/submit.php', {
                             method: 'POST',
                             body: formData
                         });
-                        
+
                         const result = await response.json();
-                        
+
                         if (result.success) {
                             formMessage.className = 'form-message success';
                             formMessage.textContent = result.message || 'Pengaduan berhasil dikirim!';
                             formMessage.style.display = 'block';
-                            
+
                             // Reset form
                             this.reset();
                             if (fileName) {
                                 fileName.textContent = 'Tidak ada file dipilih';
                                 fileName.style.color = '#999';
                             }
-                            
+
                             // Scroll to message
                             formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                         } else {
@@ -580,9 +481,74 @@ if ($isMBG) {
                 });
             }
 
-            // Logout function (Duplicate function handling just in case)
-            // ... (Kode logout sudah ada di atas, tidak perlu double declare di block ini jika struktur PHP aman)
+            // Logout function
+            async function logout() {
+                try {
+                    const response = await fetch('auth/logout.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({})
+                    });
+                    window.location.href = 'index.html';
+                } catch (e) {
+                    window.location.href = 'index.html';
+                }
+            }
         </script>
     <?php endif; ?>
+    <!-- ================= EVIDENCE MODAL COMPONENT ================= -->
+    <div id="evidenceModal" class="evidence-modal" onclick="closeEvidence(event)">
+        <div class="evidence-content">
+            <div class="evidence-close" onclick="closeEvidence(event)">&times;</div>
+            <img id="modalImg" class="evidence-img" src="" alt="Bukti Pengaduan">
+        </div>
+    </div>
+
+    <script>
+        // --- EVIDENCE VIEWER LOGIC ---
+        function viewEvidence(url) {
+            const modal = document.getElementById('evidenceModal');
+            const img = document.getElementById('modalImg');
+
+            // Set image source
+            img.src = url;
+
+            // Show modal
+            modal.classList.add('active');
+
+            // Lock body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEvidence(e) {
+            // Close if clicked on overlay (modal) or close button, but NOT image
+            if (e.target.id === 'evidenceModal' || e.target.classList.contains('evidence-close') || e.target.innerHTML === '×') {
+                const modal = document.getElementById('evidenceModal');
+
+                // Hide modal
+                modal.classList.remove('active');
+
+                // Unlock body scroll
+                document.body.style.overflow = '';
+
+                // Optional: Clear src after animation to prevent ghosting
+                setTimeout(() => {
+                    document.getElementById('modalImg').src = '';
+                }, 400);
+            }
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('evidenceModal');
+                if (modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>
