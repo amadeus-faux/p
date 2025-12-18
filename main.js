@@ -1016,21 +1016,40 @@ async function checkUserSession() {
                 };
 
                 // Add Profile Link (Unclickable but Animated)
+                // Add Profile Link (Clickable & Animated)
                 const profileBtn = document.createElement('button');
-                profileBtn.className = 'btn-signup'; // Use same style as signup btn
+                profileBtn.className = 'btn-signup'; // Menggunakan style yang sama
 
-                // Show Full Name instead of 'Akun', truncate if too long
+                // Tampilkan nama (dipotong jika terlalu panjang)
                 const displayName = data.name.length > 15 ? data.name.substring(0, 15) + '...' : data.name;
                 profileBtn.textContent = displayName;
-                profileBtn.title = data.name; // Tooltip full name
+                profileBtn.title = data.name; // Tooltip nama lengkap
 
-                // Style adjustments: default cursor since it's not clickable
-                profileBtn.style.cursor = 'default';
+                // UBAH 1: Ubah cursor menjadi pointer agar terlihat bisa diklik
+                profileBtn.style.cursor = 'pointer';
 
-                // Prevent click propagation to global listener
+                // UBAH 2: Tambahkan logika redirect saat diklik
                 profileBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
+
+                    // Tentukan file tujuan berdasarkan role
+                    let targetFile = '';
+                    switch (data.role) {
+                        case 'siswa': targetFile = 'siswa.php'; break;
+                        case 'ortu':  targetFile = 'orangtua.php'; break; // Role 'ortu' ke file 'orangtua.php'
+                        case 'sekolah': targetFile = 'sekolah.php'; break;
+                        default: return;
+                    }
+
+                    // Tentukan path berdasarkan lokasi saat ini
+                    // Jika sedang di dalam folder dashboard, langsung ke file tujuan
+                    // Jika di root (index), tambahkan folder 'dashboard/'
+                    if (window.location.pathname.includes('/dashboard/')) {
+                        window.location.href = targetFile;
+                    } else {
+                        window.location.href = 'dashboard/' + targetFile;
+                    }
                 });
 
                 container.appendChild(profileBtn);
