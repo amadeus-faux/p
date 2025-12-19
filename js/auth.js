@@ -350,6 +350,16 @@
         if (nip) formDataObj.nip = nip;
         if (idk) formDataObj.idk = idk;
 
+        // Validate MBG NIP: must be exactly 18 characters
+        if (formDataObj.role === 'mbg') {
+          const mbgNip = formDataObj.idk || '';
+          if (mbgNip.length !== 18) {
+            showResult(false, 'Validasi Gagal', 'NIP harus tepat 18 karakter.', 'signup');
+            if (submitBtn) { submitBtn.classList.remove('loading'); submitBtn.disabled = false; }
+            return;
+          }
+        }
+
         fetch(ABS('auth/register.php'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
