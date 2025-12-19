@@ -386,6 +386,18 @@ if ($user['role'] !== 'mbg') {
             color: #27ae60;
         }
 
+        .btn-logout:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.25);
+            border-color: var(--green);
+        }
+
+        .btn-logout:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 2px 10px rgba(39, 174, 96, 0.15);
+        }
+
         .username {
             background: linear-gradient(135deg, var(--accent) 0%, #ff8a00 100%);
             color: white;
