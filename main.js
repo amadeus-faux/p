@@ -976,32 +976,34 @@ async function checkUserSession() {
 
         if (data.logged_in) {
             // User is logged in
-            // 1. Hide Login/Signup buttons
-            const navButtonsContainers = document.querySelectorAll('.nav-buttons');
-            navButtonsContainers.forEach(container => {
-                container.innerHTML = ''; // Clear existing buttons
-
-                // 2. Add MBG Link if role is 'mbg'
-                const navMenu = container.closest('.nav-menu'); // Find the closest nav-menu
-                if (data.role === 'mbg' && navMenu) {
-                    // Check if link already exists to avoid duplicates within this nav-menu
+            // 2. Add MBG Dashboard Link to ALL navbars (before handling buttons)
+            if (data.role === 'mbg') {
+                const allNavMenus = document.querySelectorAll('.nav-menu, .nav-menu-mobile');
+                allNavMenus.forEach(navMenu => {
+                    // Check if link already exists to avoid duplicates
                     if (!navMenu.querySelector('.nav-item-mbg')) {
                         const mbgLink = document.createElement('a');
                         mbgLink.href = ABS('dashboard/mbg.php');
                         mbgLink.className = 'nav-item nav-item-mbg';
                         mbgLink.style.color = '#e74c3c'; // Distinguish color
                         mbgLink.style.fontWeight = '600';
-                        mbgLink.textContent = 'Dashboard Gizi';
+                        mbgLink.textContent = 'Dashboard';
 
-                        // Insert before buttons or at the end
-                        const saranLink = navMenu.querySelector('.saran-link');
-                        if (saranLink && saranLink.nextSibling) {
-                            navMenu.insertBefore(mbgLink, saranLink.nextSibling);
+                        // Insert before buttons container or at the end of menu
+                        const navButtons = navMenu.querySelector('.nav-buttons');
+                        if (navButtons) {
+                            navMenu.insertBefore(mbgLink, navButtons);
                         } else {
-                            navMenu.insertBefore(mbgLink, container);
+                            navMenu.appendChild(mbgLink);
                         }
                     }
-                }
+                });
+            }
+
+            // 1. Hide Login/Signup buttons
+            const navButtonsContainers = document.querySelectorAll('.nav-buttons');
+            navButtonsContainers.forEach(container => {
+                container.innerHTML = ''; // Clear existing buttons
 
                 // 3. Add Logout Button
                 const logoutBtn = document.createElement('button');
